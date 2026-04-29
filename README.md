@@ -1,0 +1,1 @@
+# przykladowe_kolokwium
