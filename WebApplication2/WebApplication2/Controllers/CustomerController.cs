@@ -23,7 +23,7 @@ public class CustomerController : ControllerBase
     {
         try
         {
-            var result = _dBService.GetCustomer(id);
+            var result = await _dBService.GetCustomer(id);
             return Ok(result);
         }
         catch (NotFoundException e)

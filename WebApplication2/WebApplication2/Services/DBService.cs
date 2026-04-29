@@ -12,7 +12,7 @@ public class DBService : IDBService
     
     public DBService(IConfiguration config)
     {
-        _connectionString = config.GetConnectionString("DefaultConnection");
+	    _connectionString = config.GetConnectionString("DefaultConnection") ?? string.Empty;
     }
 
     public async Task<GetCustomer> GetCustomer(int customerId)
@@ -35,7 +35,7 @@ public class DBService : IDBService
                     WHERE C.customer_id = @customerId;
                     """;
 
-        await using var con = new SqlConnection();
+        await using var con = new SqlConnection(_connectionString);
         await con.OpenAsync();
         
         await using var comm = new SqlCommand();
@@ -52,8 +52,8 @@ public class DBService : IDBService
         var ordRentalId = reader.GetOrdinal("RentalId");
         var ordRentalDate = reader.GetOrdinal("RentalDate");
         var ordReturnDate = reader.GetOrdinal("ReturnDate");
-        var ordStatus = reader.GetOrdinal("StatusName");
-        var ordMovieTitle = reader.GetOrdinal("MovieTitle");
+        var ordStatus = reader.GetOrdinal("Status");
+        var ordMovieTitle = reader.GetOrdinal("Title");
         var ordPrice = reader.GetOrdinal("PriceAtRental");
 
         while (await reader.ReadAsync())
